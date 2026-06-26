@@ -1,4 +1,4 @@
-/* ─── Reset & Global Tokens ────────────────────────────────── */
+/* ─── Reset ─────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -7,48 +7,50 @@
   box-sizing: border-box;
 }
 
+/* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  /* Light (default) */
-  --bg: #ffffff;
-  --bg-secondary: #f5f5f5;
+  --bg: #f2f2f2;
+  --bg-secondary: #e4e4e4;
+  --bg-input: #d8d8d8;
   --text: #111111;
-  --text-muted: #666666;
-  --border: #e0e0e0;
+  --text-muted: #555555;
+  --border: #bbbbbb;
   --accent: #111111;
-  --hover: rgba(0, 0, 0, 0.04);
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --hover: rgba(0, 0, 0, 0.06);
+  --cursor-color: #111111;
 
-  --font-sans: 'Space Mono', 'Courier New', 'Lucida Console', monospace;
-  --font-mono: 'Space Mono', 'Courier New', 'Lucida Console', monospace;
+  --font: 'Space Mono', 'Courier New', 'Lucida Console', Courier, monospace;
 
-  --radius: 12px;
-  --transition: 180ms ease;
+  --transition: 120ms ease;
 }
 
 [data-theme='dark'] {
-  --bg: #0a0a0a;
-  --bg-secondary: #141414;
-  --text: #f0f0f0;
-  --text-muted: #888888;
-  --border: #222222;
-  --accent: #f0f0f0;
-  --hover: rgba(255, 255, 255, 0.04);
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --bg: #0c0c0c;
+  --bg-secondary: #161616;
+  --bg-input: #1e1e1e;
+  --text: #e8e8e8;
+  --text-muted: #666666;
+  --border: #2a2a2a;
+  --accent: #e8e8e8;
+  --hover: rgba(255, 255, 255, 0.05);
+  --cursor-color: #e8e8e8;
 }
 
+/* ─── Base ──────────────────────────────────────────────────── */
 html {
   font-size: 16px;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   min-height: 100dvh;
   transition: background var(--transition), color var(--transition);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* No font smoothing — raw pixel rendering like a terminal */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 }
 
 #root {
@@ -57,89 +59,93 @@ body {
   flex-direction: column;
 }
 
-/* ─── Layout Shell ─────────────────────────────────────────── */
+/* ─── Shell ─────────────────────────────────────────────────── */
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
 }
 
-/* ─── Header ───────────────────────────────────────────────── */
+/* ─── Header ────────────────────────────────────────────────── */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: 12px 24px;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   background: var(--bg);
   z-index: 10;
-  backdrop-filter: blur(12px);
 }
 
 .header__brand {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-muted);
   user-select: none;
 }
 
+/* Tab switcher — looks like a terminal prompt selector */
 .header__tabs {
   display: flex;
-  gap: 2px;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  padding: 3px;
+  gap: 0;
+  border: 1px solid var(--border);
 }
 
 .header__tab {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-family: var(--font);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 6px 18px;
+  padding: 6px 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: 0;
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
   transition: all var(--transition);
 }
 
+.header__tab + .header__tab {
+  border-left: 1px solid var(--border);
+}
+
 .header__tab:hover {
   color: var(--text);
+  background: var(--hover);
 }
 
 .header__tab--active {
-  background: var(--bg);
-  color: var(--text);
-  box-shadow: var(--shadow);
+  background: var(--accent);
+  color: var(--bg);
 }
 
+/* Theme toggle — square terminal button */
 .header__toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 0;
   background: transparent;
   color: var(--text);
   cursor: pointer;
   transition: all var(--transition);
-  font-size: 1rem;
+  font-size: 0.85rem;
+  font-family: var(--font);
 }
 
 .header__toggle:hover {
   background: var(--hover);
 }
 
-/* ─── Main Content ─────────────────────────────────────────── */
+/* ─── Main ──────────────────────────────────────────────────── */
 .main {
   flex: 1;
   display: flex;
@@ -147,79 +153,109 @@ body {
   align-items: center;
   justify-content: center;
   padding: 32px 24px;
-  gap: 32px;
+  gap: 36px;
 }
 
-/* ─── Time Display ─────────────────────────────────────────── */
+/* ─── Time Display ──────────────────────────────────────────── */
 .time-display {
   text-align: center;
   user-select: none;
+  position: relative;
 }
 
 .time-display__value {
-  font-family: var(--font-mono);
+  font-family: var(--font);
   font-size: clamp(5rem, 16vw, 11rem);
-  font-weight: 300;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   line-height: 1;
   color: var(--text);
-  tabular-nums: true;
+  /* Disable the dotted/slashed zero in Space Mono */
+  font-feature-settings: "zero" 0, "tnum" 1;
   font-variant-numeric: tabular-nums;
+}
+
+/* blinking block cursor after the time */
+.time-display__value::after {
+  content: '▮';
+  display: inline-block;
+  margin-left: 0.08em;
+  font-size: 0.55em;
+  vertical-align: middle;
+  color: var(--text);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 .time-display__ms {
-  font-family: var(--font-mono);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 300;
+  font-family: var(--font);
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  font-weight: 400;
   color: var(--text-muted);
-  margin-top: 8px;
+  margin-top: 10px;
+  font-feature-settings: "zero" 0, "tnum" 1;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
 }
 
-/* ─── Timer Adjust Buttons ─────────────────────────────────── */
+/* ─── Timer Adjust Buttons ──────────────────────────────────── */
 .adjust-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--border);
 }
 
 .adjust-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+}
+
+.adjust-group + .adjust-group {
+  border-left: 1px solid var(--border);
 }
 
 .adjust-group__label {
-  font-size: 0.65rem;
-  font-weight: 500;
+  font-family: var(--font);
+  font-size: 0.6rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--text-muted);
+  padding: 4px 16px;
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+  text-align: center;
 }
 
 .adjust-group__buttons {
   display: flex;
-  gap: 6px;
+  flex-direction: column;
+  width: 100%;
 }
 
 .adjust-btn {
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 600;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 6px 20px;
+  border: none;
+  border-radius: 0;
   background: transparent;
   color: var(--text);
   cursor: pointer;
   transition: all var(--transition);
+  text-align: center;
+}
+
+.adjust-btn + .adjust-btn {
+  border-top: 1px solid var(--border);
 }
 
 .adjust-btn:hover {
@@ -227,28 +263,34 @@ body {
 }
 
 .adjust-btn:active {
-  transform: scale(0.94);
+  background: var(--accent);
+  color: var(--bg);
 }
 
-/* ─── Control Buttons ──────────────────────────────────────── */
+/* ─── Control Buttons ───────────────────────────────────────── */
 .controls {
   display: flex;
-  gap: 12px;
+  gap: 0;
+  border: 1px solid var(--border);
 }
 
 .control-btn {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 10px 32px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  padding: 10px 36px;
+  border: none;
+  border-radius: 0;
   background: transparent;
   color: var(--text);
   cursor: pointer;
   transition: all var(--transition);
+}
+
+.control-btn + .control-btn {
+  border-left: 1px solid var(--border);
 }
 
 .control-btn:hover {
@@ -256,65 +298,75 @@ body {
 }
 
 .control-btn:active {
-  transform: scale(0.97);
+  background: var(--accent);
+  color: var(--bg);
 }
 
 .control-btn--primary {
   background: var(--accent);
   color: var(--bg);
-  border-color: var(--accent);
 }
 
 .control-btn--primary:hover {
-  opacity: 0.85;
+  opacity: 0.8;
   background: var(--accent);
 }
 
-/* ─── Footer / World Clocks ────────────────────────────────── */
+/* ─── Footer / World Clocks ─────────────────────────────────── */
 .footer {
   border-top: 1px solid var(--border);
-  padding: 16px 24px;
+  padding: 14px 24px;
   display: flex;
   justify-content: center;
-  gap: 32px;
+  gap: 0;
   flex-wrap: wrap;
 }
 
 .clock {
   text-align: center;
-  min-width: 80px;
+  padding: 0 28px;
+  position: relative;
+}
+
+.clock + .clock::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10%;
+  height: 80%;
+  width: 1px;
+  background: var(--border);
 }
 
 .clock__city {
-  font-size: 0.65rem;
-  font-weight: 500;
+  font-family: var(--font);
+  font-size: 0.6rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .clock__time {
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  font-weight: 400;
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: 700;
   color: var(--text);
+  font-feature-settings: "zero" 0, "tnum" 1;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
 }
 
-/* ─── Responsive ───────────────────────────────────────────── */
-@media (max-width: 480px) {
+/* ─── Responsive ────────────────────────────────────────────── */
+@media (max-width: 540px) {
   .header {
-    padding: 12px 16px;
-  }
-
-  .header__brand {
-    font-size: 0.72rem;
+    padding: 10px 16px;
   }
 
   .header__tab {
-    padding: 5px 12px;
-    font-size: 0.72rem;
+    padding: 6px 14px;
+    font-size: 0.65rem;
   }
 
   .main {
@@ -323,15 +375,19 @@ body {
   }
 
   .footer {
-    padding: 14px 16px;
-    gap: 20px;
+    padding: 12px 16px;
+    gap: 0;
+  }
+
+  .clock {
+    padding: 0 16px;
   }
 
   .control-btn {
     padding: 10px 24px;
   }
 
-  .adjust-row {
-    gap: 16px;
+  .adjust-btn {
+    padding: 6px 14px;
   }
 }
