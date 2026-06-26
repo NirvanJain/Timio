@@ -1,0 +1,9 @@
+node_modules
+dist
+*.local
+.DS_Store
+.gradle
+app
+build.gradle
+settings.gradle.kts
+reset.ps1

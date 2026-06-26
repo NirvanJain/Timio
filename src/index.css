@@ -1,0 +1,337 @@
+/* ─── Reset & Global Tokens ────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Light (default) */
+  --bg: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --text: #111111;
+  --text-muted: #666666;
+  --border: #e0e0e0;
+  --accent: #111111;
+  --hover: rgba(0, 0, 0, 0.04);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  --font-sans: 'Space Mono', 'Courier New', 'Lucida Console', monospace;
+  --font-mono: 'Space Mono', 'Courier New', 'Lucida Console', monospace;
+
+  --radius: 12px;
+  --transition: 180ms ease;
+}
+
+[data-theme='dark'] {
+  --bg: #0a0a0a;
+  --bg-secondary: #141414;
+  --text: #f0f0f0;
+  --text-muted: #888888;
+  --border: #222222;
+  --accent: #f0f0f0;
+  --hover: rgba(255, 255, 255, 0.04);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+html {
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  transition: background var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Layout Shell ─────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+/* ─── Header ───────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+
+.header__brand {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.header__tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.header__tab {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.header__tab:hover {
+  color: var(--text);
+}
+
+.header__tab--active {
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.header__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-size: 1rem;
+}
+
+.header__toggle:hover {
+  background: var(--hover);
+}
+
+/* ─── Main Content ─────────────────────────────────────────── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  gap: 32px;
+}
+
+/* ─── Time Display ─────────────────────────────────────────── */
+.time-display {
+  text-align: center;
+  user-select: none;
+}
+
+.time-display__value {
+  font-family: var(--font-mono);
+  font-size: clamp(5rem, 16vw, 11rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+  tabular-nums: true;
+  font-variant-numeric: tabular-nums;
+}
+
+.time-display__ms {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Timer Adjust Buttons ─────────────────────────────────── */
+.adjust-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.adjust-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.adjust-group__label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.adjust-group__buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.adjust-btn {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.adjust-btn:hover {
+  background: var(--hover);
+}
+
+.adjust-btn:active {
+  transform: scale(0.94);
+}
+
+/* ─── Control Buttons ──────────────────────────────────────── */
+.controls {
+  display: flex;
+  gap: 12px;
+}
+
+.control-btn {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.control-btn:hover {
+  background: var(--hover);
+}
+
+.control-btn:active {
+  transform: scale(0.97);
+}
+
+.control-btn--primary {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.control-btn--primary:hover {
+  opacity: 0.85;
+  background: var(--accent);
+}
+
+/* ─── Footer / World Clocks ────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.clock {
+  text-align: center;
+  min-width: 80px;
+}
+
+.clock__city {
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.clock__time {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Responsive ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .header__brand {
+    font-size: 0.72rem;
+  }
+
+  .header__tab {
+    padding: 5px 12px;
+    font-size: 0.72rem;
+  }
+
+  .main {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  .footer {
+    padding: 14px 16px;
+    gap: 20px;
+  }
+
+  .control-btn {
+    padding: 10px 24px;
+  }
+
+  .adjust-row {
+    gap: 16px;
+  }
+}
