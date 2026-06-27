@@ -14,14 +14,16 @@
   --bg-input: #d8d8d8;
   --text: #111111;
   --text-muted: #555555;
-  --border: #bbbbbb;
+  --border: #cccccc;
   --accent: #111111;
   --hover: rgba(0, 0, 0, 0.06);
   --cursor-color: #111111;
+  --radius: 8px;
+  --radius-sm: 5px;
 
   --font: 'Space Mono', 'Courier New', 'Lucida Console', Courier, monospace;
 
-  --transition: 120ms ease;
+  --transition: 140ms ease;
 }
 
 [data-theme='dark'] {
@@ -30,9 +32,9 @@
   --bg-input: #1e1e1e;
   --text: #e8e8e8;
   --text-muted: #666666;
-  --border: #2a2a2a;
+  --border: #2e2e2e;
   --accent: #e8e8e8;
-  --hover: rgba(255, 255, 255, 0.05);
+  --hover: rgba(255, 255, 255, 0.06);
   --cursor-color: #e8e8e8;
 }
 
@@ -48,9 +50,8 @@ body {
   color: var(--text);
   min-height: 100dvh;
   transition: background var(--transition), color var(--transition);
-  /* No font smoothing — raw pixel rendering like a terminal */
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: unset;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -71,7 +72,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 24px;
+  padding: 14px 28px;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -80,38 +81,37 @@ body {
 }
 
 .header__brand {
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text);
   user-select: none;
 }
 
-/* Tab switcher — looks like a terminal prompt selector */
+/* Tab switcher */
 .header__tabs {
   display: flex;
-  gap: 0;
+  gap: 6px;
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
 }
 
 .header__tab {
   font-family: var(--font);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 6px 20px;
+  padding: 5px 18px;
   border: none;
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
   transition: all var(--transition);
-}
-
-.header__tab + .header__tab {
-  border-left: 1px solid var(--border);
 }
 
 .header__tab:hover {
@@ -124,15 +124,15 @@ body {
   color: var(--bg);
 }
 
-/* Theme toggle — square terminal button */
+/* Theme toggle */
 .header__toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border: 1px solid var(--border);
-  border-radius: 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text);
   cursor: pointer;
@@ -170,25 +170,8 @@ body {
   letter-spacing: 0.04em;
   line-height: 1;
   color: var(--text);
-  /* Disable the dotted/slashed zero in Space Mono */
   font-feature-settings: "zero" 0, "tnum" 1;
   font-variant-numeric: tabular-nums;
-}
-
-/* blinking block cursor after the time */
-.time-display__value::after {
-  content: '▮';
-  display: inline-block;
-  margin-left: 0.08em;
-  font-size: 0.55em;
-  vertical-align: middle;
-  color: var(--text);
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
 }
 
 .time-display__ms {
@@ -202,76 +185,136 @@ body {
   letter-spacing: 0.04em;
 }
 
-/* ─── Timer Adjust Buttons ──────────────────────────────────── */
-.adjust-row {
+/* ─── Timer Picker (integrated ▲ / number / ▼) ──────────────── */
+.timer-picker {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0;
-  border: 1px solid var(--border);
+  user-select: none;
 }
 
-.adjust-group {
+.timer-col {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
-.adjust-group + .adjust-group {
-  border-left: 1px solid var(--border);
-}
-
-.adjust-group__label {
+.timer-colon {
   font-family: var(--font);
-  font-size: 0.6rem;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
-  padding: 4px 16px;
-  border-bottom: 1px solid var(--border);
-  width: 100%;
-  text-align: center;
-}
-
-.adjust-group__buttons {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.adjust-btn {
-  font-family: var(--font);
-  font-size: 0.7rem;
+  font-size: clamp(5rem, 16vw, 11rem);
   font-weight: 700;
-  padding: 6px 20px;
-  border: none;
-  border-radius: 0;
+  color: var(--text-muted);
+  line-height: 1;
+  padding: 0 0.02em;
+  pointer-events: none;
+  align-self: center;
+  /* nudge to align with the number row: offset for ▼ arrow + label below */
+  margin-bottom: 66px;
+  margin-top: 38px;
+}
+
+.picker-arrow {
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px 0;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--text);
+  color: var(--text-muted);
   cursor: pointer;
   transition: all var(--transition);
+  line-height: 1;
   text-align: center;
 }
 
-.adjust-btn + .adjust-btn {
-  border-top: 1px solid var(--border);
+.picker-arrow:hover {
+  background: var(--hover);
+  color: var(--text);
 }
 
-.adjust-btn:hover {
+.picker-arrow:active {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.picker-label {
+  font-family: var(--font);
+  font-size: 0.58rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.timer-seg {
+  display: inline-block;
+  position: relative;
+  outline: none;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition), background var(--transition);
+  font-family: var(--font);
+  font-size: clamp(5rem, 16vw, 11rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--text);
+  font-feature-settings: "zero" 0, "tnum" 1;
+  font-variant-numeric: tabular-nums;
+  padding: 0 0.04em;
+}
+
+.timer-seg--editable {
+  cursor: text;
+}
+
+.timer-seg--editable:hover {
   background: var(--hover);
 }
 
-.adjust-btn:active {
+/* Underline on the active/focused segment */
+.timer-seg--active {
+  background: var(--hover);
+  box-shadow: inset 0 -4px 0 var(--accent);
+}
+
+/* Blinking cursor indicator inside active segment */
+.timer-seg--active::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 0.6em;
   background: var(--accent);
-  color: var(--bg);
+  vertical-align: middle;
+  margin-left: 0.05em;
+  animation: blink 0.9s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* Hint text below the display */
+.timer-hint {
+  font-family: var(--font);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-align: center;
+  opacity: 0.7;
 }
 
 /* ─── Control Buttons ───────────────────────────────────────── */
 .controls {
   display: flex;
-  gap: 0;
-  border: 1px solid var(--border);
+  gap: 6px;
+  border: none;
 }
 
 .control-btn {
@@ -281,16 +324,12 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 10px 36px;
-  border: none;
-  border-radius: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   background: transparent;
   color: var(--text);
   cursor: pointer;
   transition: all var(--transition);
-}
-
-.control-btn + .control-btn {
-  border-left: 1px solid var(--border);
 }
 
 .control-btn:hover {
@@ -305,11 +344,11 @@ body {
 .control-btn--primary {
   background: var(--accent);
   color: var(--bg);
+  border-color: var(--accent);
 }
 
 .control-btn--primary:hover {
-  opacity: 0.8;
-  background: var(--accent);
+  opacity: 0.82;
 }
 
 /* ─── Footer / World Clocks ─────────────────────────────────── */
@@ -365,7 +404,7 @@ body {
   }
 
   .header__tab {
-    padding: 6px 14px;
+    padding: 5px 12px;
     font-size: 0.65rem;
   }
 
@@ -384,7 +423,7 @@ body {
   }
 
   .control-btn {
-    padding: 10px 24px;
+    padding: 10px 22px;
   }
 
   .adjust-btn {
