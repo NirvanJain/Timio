@@ -22,6 +22,15 @@ function formatTime(date: Date, timezone: string): string {
   });
 }
 
+function formatDate(date: Date, timezone: string): string {
+  return date.toLocaleDateString('en-GB', {
+    timeZone: timezone,
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
+}
+
 export default function FooterClocks() {
   const [now, setNow] = useState(() => new Date());
 
@@ -35,6 +44,7 @@ export default function FooterClocks() {
       {CITIES.map((city) => (
         <div className="clock" key={city.timezone}>
           <div className="clock__city">{city.label}</div>
+          <div className="clock__date">{formatDate(now, city.timezone)}</div>
           <div className="clock__time">{formatTime(now, city.timezone)}</div>
         </div>
       ))}

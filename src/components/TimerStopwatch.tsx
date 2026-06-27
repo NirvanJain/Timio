@@ -80,7 +80,8 @@ export default function TimerStopwatch({ mode }: Props) {
 
   const resetTimer = () => {
     stopTimer();
-    setTimerRemaining(timerTarget);
+    setTimerTarget(0);
+    setTimerRemaining(0);
     setEditField(null);
     setEditBuffer('');
   };
@@ -272,98 +273,59 @@ export default function TimerStopwatch({ mode }: Props) {
 
   const isEditable = !timerRunning;
 
-  const onArrowMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();             // prevent focus moving to the button
-    arrowClickedRef.current = true; // flag: "an arrow was just pressed"
-  };
-
-  const onArrowClick = (field: 'h' | 'm' | 's', delta: number) => {
-    adjustTimer(field, delta);
-    // Reset after current microtask so subsequent non-arrow clicks work
-    requestAnimationFrame(() => { arrowClickedRef.current = false; });
-  };
-
-  const handleSegmentClick = (field: EditField) => {
-    if (!isEditable || arrowClickedRef.current) return;
-    startEdit(field);
-  };
-
-  const handleSegmentFocus = (field: 'h' | 'm' | 's') => {
-    if (!isEditable || editField === field || arrowClickedRef.current) return;
-    startEdit(field);
-  };
-
   return (
     <>
       <div className="timer-picker">
 
-        {/* ── Hours column ── */}
+        {/* ── Hours ── */}
         <div className="timer-col">
-          {isEditable && (
-            <button className="picker-arrow" onMouseDown={onArrowMouseDown} onClick={() => onArrowClick('h', 1)} aria-label="Increase hours">▲</button>
-          )}
           <span
             ref={(el) => { segmentRefs.current['h'] = el; }}
             className={`timer-seg${isEditable ? ' timer-seg--editable' : ''}${editField === 'h' ? ' timer-seg--active' : ''}`}
             tabIndex={isEditable ? 0 : -1}
-            onClick={() => handleSegmentClick('h')}
-            onFocus={() => handleSegmentFocus('h')}
+            onClick={() => isEditable && startEdit('h')}
+            onFocus={() => isEditable && editField !== 'h' && startEdit('h')}
             onKeyDown={(e) => handleSegmentKeyDown(e, 'h')}
             aria-label={`Hours: ${h}. Click or focus to edit.`}
           >
             {displayH}
           </span>
-          {isEditable && (
-            <button className="picker-arrow" onMouseDown={onArrowMouseDown} onClick={() => onArrowClick('h', -1)} aria-label="Decrease hours">▼</button>
-          )}
           <span className="picker-label">hr</span>
         </div>
 
         <span className="timer-colon">:</span>
 
-        {/* ── Minutes column ── */}
+        {/* ── Minutes ── */}
         <div className="timer-col">
-          {isEditable && (
-            <button className="picker-arrow" onMouseDown={onArrowMouseDown} onClick={() => onArrowClick('m', 5)} aria-label="Increase minutes">▲</button>
-          )}
           <span
             ref={(el) => { segmentRefs.current['m'] = el; }}
             className={`timer-seg${isEditable ? ' timer-seg--editable' : ''}${editField === 'm' ? ' timer-seg--active' : ''}`}
             tabIndex={isEditable ? 0 : -1}
-            onClick={() => handleSegmentClick('m')}
-            onFocus={() => handleSegmentFocus('m')}
+            onClick={() => isEditable && startEdit('m')}
+            onFocus={() => isEditable && editField !== 'm' && startEdit('m')}
             onKeyDown={(e) => handleSegmentKeyDown(e, 'm')}
             aria-label={`Minutes: ${m}. Click or focus to edit.`}
           >
             {displayM}
           </span>
-          {isEditable && (
-            <button className="picker-arrow" onMouseDown={onArrowMouseDown} onClick={() => onArrowClick('m', -5)} aria-label="Decrease minutes">▼</button>
-          )}
           <span className="picker-label">min</span>
         </div>
 
         <span className="timer-colon">:</span>
 
-        {/* ── Seconds column ── */}
+        {/* ── Seconds ── */}
         <div className="timer-col">
-          {isEditable && (
-            <button className="picker-arrow" onMouseDown={onArrowMouseDown} onClick={() => onArrowClick('s', 5)} aria-label="Increase seconds">▲</button>
-          )}
           <span
             ref={(el) => { segmentRefs.current['s'] = el; }}
             className={`timer-seg${isEditable ? ' timer-seg--editable' : ''}${editField === 's' ? ' timer-seg--active' : ''}`}
             tabIndex={isEditable ? 0 : -1}
-            onClick={() => handleSegmentClick('s')}
-            onFocus={() => handleSegmentFocus('s')}
+            onClick={() => isEditable && startEdit('s')}
+            onFocus={() => isEditable && editField !== 's' && startEdit('s')}
             onKeyDown={(e) => handleSegmentKeyDown(e, 's')}
             aria-label={`Seconds: ${s}. Click or focus to edit.`}
           >
             {displayS}
           </span>
-          {isEditable && (
-            <button className="picker-arrow" onMouseDown={onArrowMouseDown} onClick={() => onArrowClick('s', -5)} aria-label="Decrease seconds">▼</button>
-          )}
           <span className="picker-label">sec</span>
         </div>
       </div>

@@ -209,9 +209,7 @@ body {
   padding: 0 0.02em;
   pointer-events: none;
   align-self: center;
-  /* nudge to align with the number row: offset for ▼ arrow + label below */
-  margin-bottom: 66px;
-  margin-top: 38px;
+  margin-bottom: 20px;
 }
 
 .picker-arrow {
@@ -379,22 +377,34 @@ body {
 
 .clock__city {
   font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.clock__date {
+  font-family: var(--font);
   font-size: 0.6rem;
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.1em;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
+  opacity: 0.6;
 }
 
 .clock__time {
   font-family: var(--font);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-muted);
   font-feature-settings: "zero" 0, "tnum" 1;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
 }
 
 /* ─── Responsive ────────────────────────────────────────────── */
