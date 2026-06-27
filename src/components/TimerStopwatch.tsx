@@ -21,6 +21,7 @@ export default function TimerStopwatch({ mode }: Props) {
   const [timerTarget, setTimerTarget] = useState(0); // ms (what the user sets)
   const [timerRemaining, setTimerRemaining] = useState(0); // ms
   const [timerRunning, setTimerRunning] = useState(false);
+  const [timerDone, setTimerDone] = useState(false);
   const timerEnd = useRef(0);
   const timerRaf = useRef<number | null>(null);
 
@@ -58,6 +59,7 @@ export default function TimerStopwatch({ mode }: Props) {
     if (left <= 0) {
       setTimerRemaining(0);
       setTimerRunning(false);
+      setTimerDone(true);
       return;
     }
     setTimerRemaining(left);
@@ -82,6 +84,7 @@ export default function TimerStopwatch({ mode }: Props) {
     stopTimer();
     setTimerTarget(0);
     setTimerRemaining(0);
+    setTimerDone(false);
     setEditField(null);
     setEditBuffer('');
   };
@@ -275,7 +278,13 @@ export default function TimerStopwatch({ mode }: Props) {
 
   return (
     <>
-      <div className="timer-picker">
+      {timerDone && (
+        <div className="timesup-overlay" onClick={resetTimer}>
+          <div className="timesup-text">TIME'S UP</div>
+          <div className="timesup-sub">tap to dismiss</div>
+        </div>
+      )}
+      <div className={`timer-picker${timerDone ? ' timer-picker--done' : ''}`}>
 
         {/* ── Hours ── */}
         <div className="timer-col">

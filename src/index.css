@@ -185,6 +185,56 @@ body {
   letter-spacing: 0.04em;
 }
 
+/* ─── Time's Up Overlay ──────────────────────────────────────── */
+.timesup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  animation: timesup-fade-in 0.35s ease forwards;
+}
+
+@keyframes timesup-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.timesup-text {
+  font-family: var(--font);
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  animation: timesup-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             timesup-pulse 1.4s ease-in-out 0.5s infinite;
+}
+
+@keyframes timesup-pop {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes timesup-pulse {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%       { opacity: 0.65; transform: scale(0.96); }
+}
+
+.timesup-sub {
+  font-family: var(--font);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 20px;
+  animation: timesup-fade-in 0.6s ease 0.4s both;
+}
+
 /* ─── Timer Picker (integrated ▲ / number / ▼) ──────────────── */
 .timer-picker {
   display: flex;
