@@ -410,8 +410,10 @@ body {
 }
 
 .clock {
+  flex: 1 1 160px;
+  min-width: 140px;
   text-align: center;
-  padding: 0 28px;
+  padding: 0 12px;
   position: relative;
 }
 
@@ -448,13 +450,13 @@ body {
 
 .clock__time {
   font-family: var(--font);
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
   font-feature-settings: "zero" 0, "tnum" 1;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.06em;
-  opacity: 0.7;
+  white-space: nowrap;
 }
 
 /* ─── Responsive ────────────────────────────────────────────── */
@@ -475,11 +477,13 @@ body {
 
   .footer {
     padding: 12px 16px;
-    gap: 0;
+    row-gap: 14px;
   }
 
   .clock {
-    padding: 0 16px;
+    flex-basis: 50%;
+    min-width: 0;
+    padding: 0 8px;
   }
 
   .control-btn {
