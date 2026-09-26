@@ -7,3 +7,6 @@ app
 build.gradle
 settings.gradle.kts
 reset.ps1
+
+.vercel
+.env*
