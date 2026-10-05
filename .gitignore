@@ -9,4 +9,4 @@ settings.gradle.kts
 reset.ps1
 
 .vercel
-.env*
+config.bat
